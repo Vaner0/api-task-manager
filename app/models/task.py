@@ -1,0 +1,20 @@
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+from app.database import Base
+
+
+class Task(Base):
+    __tablename__ = "tasks"
+
+    id          = Column(Integer, primary_key=True, index=True)
+    titre       = Column(String, nullable=False)
+    description = Column(String, nullable=True)
+    statut      = Column(String, default="todo")    
+    priorite    = Column(String, default="normale")
+    terminee    = Column(Boolean, default=False)
+    created_at  = Column(DateTime(timezone=True), server_default=func.now())
+
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+
+    owner = relationship("User", back_populates="tasks")
